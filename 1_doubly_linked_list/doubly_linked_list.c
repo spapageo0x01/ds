@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <assert.h>
 
 #include "doubly_linked_list.h"
@@ -13,7 +12,7 @@ dlist_t * dlist_init(void)
 
 	new_list = malloc(sizeof(dlist_t));
 	if (new_list == NULL) {
-		fprintf(stderr, "Failed to allocate memory\n");
+		fprintf(stderr, "%s - Failed to allocate memory\n", __func__);
 		return NULL;
 	}
 
@@ -68,23 +67,22 @@ int dlist_is_empty(dlist_t *L)
 }
 
 // Input: a list and the data to be inserted
-// Return: void
+// Return: EXIT_SUCCESS on success, EXIT_FAILURE on failure
 // Description: Allocates a new node and inserts it a the head of the list
 // Time complexity: O(1)
-void dlist_insert(dlist_t *L, int x)
+int dlist_insert(dlist_t *L, int x)
 {
 	dnode_t *new_node;
 
 	if (L == NULL) {
 		fprintf(stderr, "List given is NULL\n");
-		//printf("List given is NULL\n");
-		return;
+		return EXIT_FAILURE;
 	}
 
 	new_node = malloc(sizeof(dnode_t));
 	if (new_node == NULL) {
 		fprintf(stderr, "Failed to allocate memory.\n");
-		return;
+		return EXIT_FAILURE;
 	}
 
 	new_node->key = x;
@@ -97,6 +95,8 @@ void dlist_insert(dlist_t *L, int x)
 	}
 	L->head = new_node;
 	pthread_mutex_unlock(&L->lock);
+
+	return EXIT_SUCCESS;
 }
 
 //Returns pointer to element with key provided, NULL otherwise
@@ -125,13 +125,13 @@ dnode_t * dlist_search(dlist_t *L, int key) {
 
 
 // Time complexity O(N) worst case
-void dlist_delete(dlist_t *L, int key) {
+int dlist_delete(dlist_t *L, int key) {
 	int steps = 0;
 	dnode_t *temp = NULL;
 
 	if (L == NULL) {
 		fprintf(stderr, "List given is NULL\n");
-		return;
+		return EXIT_FAILURE;
 	}
 
 	pthread_mutex_lock(&L->lock);
@@ -158,6 +158,8 @@ void dlist_delete(dlist_t *L, int key) {
 		}
 	}
 	pthread_mutex_unlock(&L->lock);
+
+	return EXIT_SUCCESS;
 }
 
 
@@ -184,7 +186,11 @@ int main() {
 	dlist_t *L;
 
 	L = dlist_init();
-	if (!L) {printf("Death\n"); return 1;}
+
+	if (!L) {
+		printf("Death\n"); 
+		return 1;
+	}
 
 	dlist_insert(L, 10);
 	dlist_insert(L, 5);

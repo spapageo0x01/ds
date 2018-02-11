@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
 
@@ -10,11 +9,11 @@ typedef struct dlist_object {
 
 typedef struct dlist {
 	dnode_t *head;
-	pthread_mutex_t lock;
+	pthread_mutex_t lock;	//TODO: per node lock would be much faster!
 } dlist_t;
 
-dlist_t * dlist_init(void);
+dlist_t * dlist_init(void);	//destroy
 int dlist_is_empty(dlist_t *L);
-void dlist_insert(dlist_t *L, int x);			// REPLACE WITH VOID
+int dlist_insert(dlist_t *L, int x);			// REPLACE WITH VOID
 dnode_t * dlist_search(dlist_t *L, int key);
-void dlist_delete(dlist_t *L, int key);
+int dlist_delete(dlist_t *L, int key);

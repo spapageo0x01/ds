@@ -16,13 +16,19 @@ typedef struct __queue_t {
 } queue_t;
 
 
+//TODO: peek() - gets the element at the front of the queue without removing it
+//TODO: isfull() - checks if the queue is full
+//TODO: isempty() - Checks if the queue is empty
+
 void queue_init(queue_t *q)
 {
+	//TODO: error checks? Retry?
 	node_t *tmp = malloc(sizeof(node_t));
 	assert(tmp);
 
 	tmp->next = NULL;
 	q->head = q->tail = tmp;
+	//TODO: return value checks?
 	pthread_mutex_init(&q->head_lock, NULL);
 	pthread_mutex_init(&q->tail_lock, NULL);
 }
@@ -57,6 +63,15 @@ int queue_dequeue(queue_t *q, int *value) {
 	free(tmp);
 	return 0;
 }
+
+//TODO: complete this!
+void queue_destroy(queue_t *q)
+{
+	//free nodes?
+	pthread_mutex_destroy(&q->tail_lock);
+	pthread_mutex_destroy(&q->head_lock);
+}
+
 
 
 int main(void)
