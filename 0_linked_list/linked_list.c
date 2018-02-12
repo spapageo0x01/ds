@@ -18,6 +18,8 @@ list_t * list_init(void)
 	return new_list;
 }
 
+
+// Note: No threads should be using the list!
 int list_destroy(list_t *list)
 {
 	node_t *tmp, *next;
@@ -81,17 +83,16 @@ int list_insert_head(list_t *list, void *data)
 		pthread_mutex_lock(&head->lock);
 		new_node->next = list->head;
 		list->head = new_node;
-		pthread_mutex_unlock(&head->lock);	
+		pthread_mutex_unlock(&head->lock);
 	}
 	pthread_mutex_unlock(&list->lock);
-
 	return EXIT_SUCCESS;
 }
 
 
 int list_insert_tail(list_t *list, void *data)
 {
-	node_t *new_node, *tmp;
+	node_t *new_node, *tmp, *prev;
 
 	if (list == NULL) {
 		fprintf(stderr, "[%s] NULL list provided\n", __func__);
@@ -107,20 +108,26 @@ int list_insert_tail(list_t *list, void *data)
 	pthread_mutex_init(&new_node->lock, NULL);
 	new_node->next = NULL;
 
+
 	pthread_mutex_lock(&list->lock);
 	if (list->head == NULL) {
 		new_node->next = list->head;
 		list->head = new_node;
 		pthread_mutex_unlock(&list->lock);
 	} else {
-		//LOCKS?
 		tmp = list->head;
+		pthread_mutex_lock(&tmp->lock);		//Make sure no-one gets node lock first and then tries to get list lock --> DEADLOCK
+		pthread_mutex_unlock(&list->lock);
 
-		while (tmp->next) {
+		while (tmp->next != NULL) {
+			pthread_mutex_lock(&tmp->next->lock);
+			prev = tmp;
 			tmp = tmp->next;
+			pthread_mutex_unlock(&prev->lock);
 		}
 
 		tmp->next = new_node;
+		pthread_mutex_unlock(&tmp->lock);
 	}
 
 	return EXIT_SUCCESS;
