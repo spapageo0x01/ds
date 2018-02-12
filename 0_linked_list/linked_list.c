@@ -57,7 +57,7 @@ out:
 
 int list_insert_head(list_t *list, void *data)
 {
-	node_t *new_node, *head;
+	node_t *new_node;
 
 	if (list == NULL) {
 		fprintf(stderr, "[%s] NULL list provided\n", __func__);
@@ -73,14 +73,8 @@ int list_insert_head(list_t *list, void *data)
 	new_node->next = NULL;
 
 	pthread_mutex_lock(&list->lock);
-	if (list->head == NULL) {
-		new_node->next = list->head;
-		list->head = new_node;
-	} else {
-		head = list->head;
-		new_node->next = list->head;
-		list->head = new_node;
-	}
+	new_node->next = list->head;
+	list->head = new_node;
 	pthread_mutex_unlock(&list->lock);
 	return EXIT_SUCCESS;
 }
@@ -88,7 +82,7 @@ int list_insert_head(list_t *list, void *data)
 
 int list_insert_tail(list_t *list, void *data)
 {
-	node_t *new_node, *tmp, *prev;
+	node_t *new_node, *tmp;
 
 	if (list == NULL) {
 		fprintf(stderr, "[%s] NULL list provided\n", __func__);
@@ -119,6 +113,27 @@ int list_insert_tail(list_t *list, void *data)
 	return EXIT_SUCCESS;
 }
 
+
+size_t list_length(list_t *list)
+{
+	size_t length = 0;
+	node_t *tmp;
+
+	if (list == NULL) {
+		fprintf(stderr, "[%s] NULL list provided\n", __func__);
+		return EXIT_FAILURE;
+	}
+
+	pthread_mutex_lock(&list->lock);
+	tmp = list->head;
+	while (tmp != NULL) {
+		length++;
+		tmp = tmp->next;
+	}
+	pthread_mutex_unlock(&list->lock);
+
+	return length;
+}
 
 
 
