@@ -136,8 +136,7 @@ int list_insert_tail(list_t *list, void *data)
 
 
 
-//-----------------testing code------------
-
+//TODO: make tests multithreaded
 int main()
 {
 	int ret;

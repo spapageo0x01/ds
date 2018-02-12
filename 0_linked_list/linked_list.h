@@ -15,13 +15,14 @@ typedef struct list {
 
 list_t * list_init(void);
 int list_destroy(list_t *list);
-//-----
-
 int list_insert_head(list_t *list, void *data);
 int list_insert_tail(list_t *list, void *data);
+//-----
 int list_insert_sort(list_t *list, void *data, int (*compare)(const void *, const void *));
 
 int list_delete_element(list_t *list, void *data);
 
+//node_t list_search(list_t *list);
+int list_length(list_t *list);
 int list_delete_head();	//?
 int list_delete_tail();	//?
