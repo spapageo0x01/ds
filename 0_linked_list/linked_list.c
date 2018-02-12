@@ -114,6 +114,16 @@ int list_insert_tail(list_t *list, void *data)
 }
 
 
+node_t * list_remove_head(list_t *list)
+{
+}
+
+node_t * list_remove_tail(list_t *list)
+{
+}
+
+
+
 size_t list_length(list_t *list)
 {
 	size_t length = 0;
@@ -137,6 +147,8 @@ size_t list_length(list_t *list)
 
 
 
+
+/////////////////////////////////////////
 //TODO: make tests multithreaded
 int main()
 {
