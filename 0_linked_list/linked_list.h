@@ -3,7 +3,6 @@
 
 typedef struct list_node {
 	void *data;
-	pthread_mutex_t lock;
 	struct list_node *next;
 } node_t;
 
@@ -20,7 +19,7 @@ int list_insert_tail(list_t *list, void *data);
 //-----
 int list_insert_sort(list_t *list, void *data, int (*compare)(const void *, const void *));
 
-int list_delete_element(list_t *list, void *data);
+//int list_delete_element(list_t *list, void *data);
 
 //node_t list_search(list_t *list);
 int list_length(list_t *list);
