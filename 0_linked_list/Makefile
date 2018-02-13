@@ -1,10 +1,9 @@
 all:
-	gcc -c -Wall -Werror -fpic linked_list.c
+	gcc -c -Wall -Werror -fPIC -g -lpthread linked_list.c
 	gcc -shared -o libllsp.so linked_list.o
 
 install:
 	cp libllsp.so /usr/local/lib
-#	gcc -g -Wall -lpthread -o list 0_linked_list/linked_list.c
-#	gcc -g -Wall -lpthread -o queue 2_queue/queue.c
+	ldconfig -n /usr/local/lib
 clean:
-	rm -f linked_list.o libllsp.so
+	rm -f linked_list.o libllsp.so /usr/local/lib/libllsp.so

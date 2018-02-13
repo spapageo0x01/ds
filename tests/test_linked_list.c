@@ -1,7 +1,8 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
 #include "../0_linked_list/linked_list.h"
 
-/////////////////////////////////////////
-//TODO: make tests multithreaded
 int main()
 {
         int ret;
