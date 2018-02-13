@@ -31,19 +31,15 @@ int list_destroy(list_t *list)
 	}
 
 	// 1. Check if there are any nodes within the list. If so, delete them
-	if (list->head == NULL) {
-		goto out;
+	if (list->head != NULL) {
+		tmp = list->head;
+		do {
+			next = tmp->next;
+			free(tmp);
+			tmp = next;
+		} while (tmp != NULL);
 	}
 
-
-	tmp = list->head;
-	do {
-		next = tmp->next;
-		free(tmp);
-		tmp = next;
-	} while (tmp != NULL);
-
-out:
 	// 2. Free the list descriptor.
 	pthread_mutex_destroy(&list->lock);
 	free(list);
