@@ -1,20 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include <pthread.h>
-
-typedef struct __node_t {
-	int 			value;
-	struct __node_t	*next;
-} node_t;
-
-typedef struct __queue_t {
-	node_t *head;
-	node_t *tail;
-	pthread_mutex_t head_lock;
-	pthread_mutex_t tail_lock;
-} queue_t;
-
+#include "queue.h"
 
 //TODO: peek() - gets the element at the front of the queue without removing it
 //TODO: isfull() - checks if the queue is full
@@ -79,12 +66,12 @@ int main(void)
 	int ret;
 	queue_t queue;
 	queue_init(&queue);
-	assert(&queue);
+	assert(queue);
 
 	queue_enqueue(&queue, 10);
 	queue_enqueue(&queue, 5);
 	queue_enqueue(&queue, 12);
-	
+
 	queue_dequeue(&queue, &ret);
 	printf("%d\n", ret);
 	queue_dequeue(&queue, &ret);
