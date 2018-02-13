@@ -20,7 +20,7 @@ int list_isempty(list_t *list);
 
 int list_insert_head(list_t *list, void *data);
 int list_insert_tail(list_t *list, void *data);
-//int list_insert_sorted(list_t *list, void *data, int (*compare)(const void *, const void *));
+int list_insert_sorted(list_t *list, void *data, int (*compare)(const void *, const void *));
 
 // 0 if not, 1 if exists
 int list_lookup(list_t *list, void *data, int (*isequal)(const void *, const void *));

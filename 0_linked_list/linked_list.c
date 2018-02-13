@@ -110,6 +110,50 @@ int list_insert_tail(list_t *list, void *data)
 }
 
 
+int list_insert_sorted(list_t *list, void *data, int (*compare)(const void *, const void *))
+{
+	node_t *new_node, *prev, *tmp;
+
+	if (list == NULL) {
+		fprintf(stderr, "[%s] NULL list provided\n", __func__);
+		return EXIT_FAILURE;
+	}
+
+	new_node = malloc(sizeof(node_t));
+	if (new_node == NULL) {
+		fprintf(stderr, "[%s] Failed to allocate memory\n", __func__);
+		return EXIT_FAILURE;
+	}
+	new_node->data = data;
+	new_node->next = NULL;
+
+	pthread_mutex_lock(&list->lock);
+	if (list->head == NULL) {
+		new_node->next = list->head;
+		list->head = new_node;
+	} else {
+		tmp = prev = list->head;
+
+		while (tmp != NULL) {
+			if (compare(data, tmp->data)) {
+				prev->next = new_node;
+				new_node->next = tmp;
+				break;
+			}
+			prev = tmp;
+			tmp = tmp->next;
+		}
+
+		if (tmp == NULL) {
+			prev->next = new_node;
+		}
+	}
+	pthread_mutex_unlock(&list->lock);
+
+	return EXIT_SUCCESS;
+}
+
+
 void * list_remove_head(list_t *list)
 {
 	void * data = NULL;
