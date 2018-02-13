@@ -114,14 +114,70 @@ int list_insert_tail(list_t *list, void *data)
 }
 
 
-node_t * list_remove_head(list_t *list)
+void * list_remove_head(list_t *list)
 {
+	void * data = NULL;
+	node_t *node;
+	if ((list == NULL) || (list->head == NULL)) {
+		return NULL;
+	}
+
+	pthread_mutex_lock(&list->lock);
+	node = list->head;
+	list->head = list->head->next;
+	pthread_mutex_unlock(&list->lock);
+
+	data = node->data;
+	free(node);
+
+	return data;
 }
 
-node_t * list_remove_tail(list_t *list)
+void * list_remove_tail(list_t *list)
 {
+	void * data = NULL;
+	node_t *node, *prev;
+	if ((list == NULL) || (list->head == NULL)) {
+		return NULL;
+	}
+
+	pthread_mutex_lock(&list->lock);
+	node = prev = list->head;
+	while (node->next) {
+		prev = node;
+		node = node->next;
+	}
+	prev->next = NULL;
+	pthread_mutex_unlock(&list->lock);
+
+	data = node->data;
+	free(node);
+
+	return data;
 }
 
+
+int list_lookup(list_t *list, void *data, int (*isequal)(const void *, const void *))
+{
+	int found = 0;
+	node_t *tmp;
+	if ((list == NULL) || (list->head == NULL)) {
+		return 0;
+	}
+
+	pthread_mutex_lock(&list->lock);
+	tmp = list->head;
+	while (tmp) {
+		if (isequal(data, tmp->data)) {
+			found = 1;
+			break;
+		}
+		tmp = tmp->next;
+	}
+	pthread_mutex_unlock(&list->lock);
+
+	return found;
+}
 
 
 size_t list_length(list_t *list)
