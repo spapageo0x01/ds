@@ -3,13 +3,13 @@
 #include "linked_list.h"
 #include "../error/errors_sp.h"
 
-list_t * list_init(void)
+list_t * list_init(int *error)
 {
 	list_t *new_list;
 
 	new_list = malloc(sizeof(list_t));
-	if (new_list == NULL) {
-		fprintf(stderr, "[%s] - Failed to allocate memory\n", __func__);
+	if (!new_list) {
+		*error = ERROR_NULL;
 		return NULL;
 	}
 
@@ -21,13 +21,13 @@ list_t * list_init(void)
 
 
 // Note: No threads should be using the list!
-int list_destroy(list_t *list)
+int list_destroy(list_t *list, int *error)
 {
 	node_t *tmp, *next;
 
 	// 0. Check if list is NULL
-	if (list == NULL) {
-		fprintf(stderr,"[%s] - NULL list provided\n", __func__);
+	if (!list) {
+		*error = ERROR_NULL;
 		return EXIT_FAILURE;
 	}
 
@@ -52,18 +52,18 @@ int list_destroy(list_t *list)
 
 
 
-int list_insert_head(list_t *list, void *data)
+int list_insert_head(list_t *list, void *data, int *error)
 {
 	node_t *new_node;
 
-	if (list == NULL) {
-		fprintf(stderr, "[%s] NULL list provided\n", __func__);
+	if (!list) {
+		*error = ERROR_NULL;
 		return EXIT_FAILURE;
 	}
 
 	new_node = malloc(sizeof(node_t));
-	if (new_node == NULL) {
-		fprintf(stderr, "[%s] Failed to allocate memory\n", __func__);
+	if (!new_node) {
+		*error = ERROR_ALLOC;
 		return EXIT_FAILURE;
 	}
 	new_node->data = data;
@@ -77,18 +77,18 @@ int list_insert_head(list_t *list, void *data)
 }
 
 
-int list_insert_tail(list_t *list, void *data)
+int list_insert_tail(list_t *list, void *data, int *error)
 {
 	node_t *new_node, *tmp;
 
-	if (list == NULL) {
-		fprintf(stderr, "[%s] NULL list provided\n", __func__);
+	if (!list) {
+		*error = ERROR_NULL;
 		return EXIT_FAILURE;
 	}
 
 	new_node = malloc(sizeof(node_t));
-	if (new_node == NULL) {
-		fprintf(stderr, "[%s] Failed to allocate memory\n", __func__);
+	if (!new_node) {
+		*error = ERROR_ALLOC;
 		return EXIT_FAILURE;
 	}
 	new_node->data = data;
@@ -111,18 +111,18 @@ int list_insert_tail(list_t *list, void *data)
 }
 
 
-int list_insert_sorted(list_t *list, void *data, int (*compare)(const void *, const void *))
+int list_insert_sorted(list_t *list, void *data, int (*compare)(const void *, const void *), int *error)
 {
 	node_t *new_node, *prev, *tmp;
 
-	if (list == NULL) {
-		fprintf(stderr, "[%s] NULL list provided\n", __func__);
+	if (!list) {
+		*error = ERROR_NULL;
 		return EXIT_FAILURE;
 	}
 
 	new_node = malloc(sizeof(node_t));
-	if (new_node == NULL) {
-		fprintf(stderr, "[%s] Failed to allocate memory\n", __func__);
+	if (!new_node) {
+		*error = ERROR_ALLOC;
 		return EXIT_FAILURE;
 	}
 	new_node->data = data;
@@ -155,11 +155,17 @@ int list_insert_sorted(list_t *list, void *data, int (*compare)(const void *, co
 }
 
 
-void * list_remove_head(list_t *list)
+void * list_remove_head(list_t *list, int *error)
 {
 	void * data = NULL;
 	node_t *node;
-	if ((list == NULL) || (list->head == NULL)) {
+
+	if (!list) {
+		*error = ERROR_NULL;
+		return NULL;
+	}
+
+	if (!list->head) {
 		return NULL;
 	}
 
@@ -174,11 +180,17 @@ void * list_remove_head(list_t *list)
 	return data;
 }
 
-void * list_remove_tail(list_t *list)
+void * list_remove_tail(list_t *list, int *error)
 {
 	void * data = NULL;
 	node_t *node, *prev;
-	if ((list == NULL) || (list->head == NULL)) {
+
+	if (!list) {
+		*error = ERROR_NULL;
+		return NULL;
+	}
+
+	if (list->head == NULL) {
 		return NULL;
 	}
 
@@ -198,11 +210,13 @@ void * list_remove_tail(list_t *list)
 }
 
 
-int list_lookup(list_t *list, void *data, int (*isequal)(const void *, const void *))
+int list_lookup(list_t *list, void *data, int (*isequal)(const void *, const void *), int *error)
 {
 	int found = 0;
 	node_t *tmp;
+
 	if ((list == NULL) || (list->head == NULL)) {
+		*error = ERROR_NULL;
 		return 0;
 	}
 
@@ -221,13 +235,13 @@ int list_lookup(list_t *list, void *data, int (*isequal)(const void *, const voi
 }
 
 
-size_t list_length(list_t *list)
+size_t list_length(list_t *list, int *error)
 {
 	size_t length = 0;
 	node_t *tmp;
 
 	if (list == NULL) {
-		fprintf(stderr, "[%s] NULL list provided\n", __func__);
+		*error = ERROR_NULL;
 		return EXIT_FAILURE;
 	}
 

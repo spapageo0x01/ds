@@ -12,18 +12,18 @@ typedef struct list {
 } list_t;
 
 
-list_t * list_init(void);
-int list_destroy(list_t *list);
+list_t * list_init(int *error);
+int list_destroy(list_t *list, int *error);
 
-size_t list_length(list_t *list);
-int list_isempty(list_t *list);
+size_t list_length(list_t *list, int *error);
+int list_isempty(list_t *list, int *error);
 
-int list_insert_head(list_t *list, void *data);
-int list_insert_tail(list_t *list, void *data);
-int list_insert_sorted(list_t *list, void *data, int (*compare)(const void *, const void *));
+int list_insert_head(list_t *list, void *data, int *error);
+int list_insert_tail(list_t *list, void *data, int *error);
+int list_insert_sorted(list_t *list, void *data, int (*compare)(const void *, const void *), int *error);
 
 // 0 if not, 1 if exists
-int list_lookup(list_t *list, void *data, int (*isequal)(const void *, const void *));
+int list_lookup(list_t *list, void *data, int (*isequal)(const void *, const void *), int *error);
 
-void * list_remove_head(list_t *list);
-void * list_remove_tail(list_t *list);
+void * list_remove_head(list_t *list, int *error);
+void * list_remove_tail(list_t *list, int *error);
