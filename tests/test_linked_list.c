@@ -1,7 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <pthread.h>
 #include "../0_linked_list/linked_list.h"
+
+//TODO: spawn threads
+//TODO: do work functions
+//TODO: destroy threads
 
 int main()
 {

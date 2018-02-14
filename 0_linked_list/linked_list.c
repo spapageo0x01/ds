@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include "linked_list.h"
+#include "../error/errors_sp.h"
 
 list_t * list_init(void)
 {
