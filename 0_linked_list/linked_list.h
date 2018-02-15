@@ -8,6 +8,7 @@ typedef struct list_node {
 
 typedef struct list {
 	node_t *head;
+	size_t length;
 	pthread_mutex_t lock;
 } list_t;
 

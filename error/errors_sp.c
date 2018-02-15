@@ -3,7 +3,7 @@
 
 void sp_print_error(int error_code)
 {
-	switch(error_code) {
+	switch (error_code) {
 		case ERROR_NULL:
 			fprintf(stderr, "NULL pointer to data structure provided.\n");
 			break;
