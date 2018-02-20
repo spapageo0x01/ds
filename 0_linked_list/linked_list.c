@@ -4,7 +4,6 @@
 #include "../error/errors_sp.h"
 
 
-//
 // Time Complexity: O(1)
 list_t * list_init(int *error)
 {

@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <pthread.h>
-#include "../0_linked_list/linked_list.h"
 
 #define NUMBER_OF_THREADS 4
 
