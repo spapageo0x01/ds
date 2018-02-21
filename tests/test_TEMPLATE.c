@@ -7,6 +7,7 @@
 
 struct thread_info {
 	int tid;
+	//DATA STRUCTURE DESCRIPTOR
 };
 
 
@@ -25,6 +26,8 @@ int main()
 	pthread_t worker_threads[NUMBER_OF_THREADS];
 	struct thread_info tinfo[NUMBER_OF_THREADS];
 
+	//INIT DATA STRUCTURE
+
 	// Spawn threads
 	for (i = 0; i < NUMBER_OF_THREADS; ++i) {
 		tinfo[i].tid = i;
@@ -41,6 +44,8 @@ int main()
 			printf("Error joining thread %d\n", i);
 		}
 	}
+
+	//DESTROY DATA STRUCTURE
 
 
         return EXIT_SUCCESS;
