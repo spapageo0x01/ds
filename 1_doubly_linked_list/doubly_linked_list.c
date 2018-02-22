@@ -1,22 +1,23 @@
 #include <stdio.h>
-#include <assert.h>
-
 #include "doubly_linked_list.h"
+#include "../error/errors_sp.h"
 
 // Input: void
 // Return: A newly allocted doubly linked list.
 // Time complexity: O(1)
-dlist_t * dlist_init(void)
+dlist_t * dlist_init(int *error)
 {
 	dlist_t *new_list;
+	*error = NO_ERROR;
 
 	new_list = malloc(sizeof(dlist_t));
-	if (new_list == NULL) {
-		fprintf(stderr, "%s - Failed to allocate memory\n", __func__);
+	if (!new_list) {
+		*error = ERROR_NULL;
 		return NULL;
 	}
 
 	new_list->head = NULL;
+	new_list->length = 0;
 	pthread_mutex_init(&new_list->lock, NULL);
 
 	return new_list;
@@ -26,78 +27,91 @@ dlist_t * dlist_init(void)
 // Description: Frees all nodes and the list itself
 // Returns: 1 if operation succeeds. Otherwise returns 0.
 // Time complexity: O(N) worst case
-int dlist_destroy(dlist_t *L)
+int dlist_destroy(dlist_t *list, int *error)
 {
-	dnode_t * dest_node;
-	dnode_t * temp_node;
-	if (L == NULL) {
-		return 1;
+	dnode_t * dest, temp;
+	*error = NO_ERROR;
+
+	if (!list) {
+		*error = ERROR_NULL;
+		return EXIT_FAILURE;
 	}
 
-	if (L->head == NULL) {
-		goto free_out;
+	if (list->head != NULL) {
+		pthread_mutex_lock(&list->lock);
+		temp = list->head;
+		while (temp->next) {
+			dest = temp;
+			temp = temp->next;
+			temp->prev = NULL;
+			free(dest);
+		}
+		free(temp);
+		pthread_mutex_unlock(&list->lock);
 	}
 
-	pthread_mutex_unlock(&L->lock);
+	pthread_mutex_destroy(&list->lock);
+	free(list);
 
-	temp_node = L->head;
-	dest_node = NULL;
-
-	while(temp_node->next) {
-		dest_node = temp_node;
-		temp_node = temp_node->next;
-		temp_node->prev = NULL;
-		L->head = temp_node;
-		free(dest_node);
-	}
-	pthread_mutex_unlock(&L->lock);
-free_out:
-	free(temp_node);
-	pthread_mutex_destroy(&L->lock);
-	free(L);
-	return 1;
+	return EXIT_SUCCESS;
 }
 
-// Input: a list
 // Returns 1 if the list is empty. Otherwise returns 0.
 // Time complexity: O(1)
-int dlist_is_empty(dlist_t *L)
+int dlist_isempty(dlist_t *list)
 {
-	return (L->head == NULL) ? 1 : 0;
+	return (list->head == NULL) ? 1 : 0;
 }
 
-// Input: a list and the data to be inserted
+size_t dlist_length(dlist_t *list, int *error)
+{
+	*error = NO_ERROR;
+	if (!list) { 
+		*error = ERROR_NULL;
+		return 0;
+	}
+
+	return list->length;
+}
+
+//------------------------------------------------------------
+
+
 // Return: EXIT_SUCCESS on success, EXIT_FAILURE on failure
 // Description: Allocates a new node and inserts it a the head of the list
 // Time complexity: O(1)
-int dlist_insert(dlist_t *L, int x)
+int dlist_insert_head(dlist_t *list, void *data, int *error)
 {
 	dnode_t *new_node;
+	*error = NO_ERROR;
 
-	if (L == NULL) {
-		fprintf(stderr, "List given is NULL\n");
+	if (list == NULL) {
+		*error = ERROR_NULL;
 		return EXIT_FAILURE;
 	}
 
 	new_node = malloc(sizeof(dnode_t));
 	if (new_node == NULL) {
-		fprintf(stderr, "Failed to allocate memory.\n");
+		*error = ERROR_ALLOC;
 		return EXIT_FAILURE;
 	}
 
-	new_node->key = x;
+	new_node->data = data;
 	new_node->prev = NULL;
 
-	pthread_mutex_lock(&L->lock);
-	new_node->next = L->head;
-	if (L->head != NULL) {
-		L->head->prev = new_node;
+	pthread_mutex_lock(&list->lock);
+	new_node->next = list->head;
+	if (list->head != NULL) {
+		list->head->prev = new_node;
 	}
-	L->head = new_node;
-	pthread_mutex_unlock(&L->lock);
+	list->head = new_node;
+	++list->length;
+	pthread_mutex_unlock(&list->lock);
 
 	return EXIT_SUCCESS;
 }
+
+/*
 
 //Returns pointer to element with key provided, NULL otherwise
 //Time complexity O(N) worst case
@@ -180,30 +194,28 @@ void dlist_print(dlist_t *L)
 	pthread_mutex_unlock(&L->lock);
 }
 
+*/
 
-int main() {
-	int i;
-	dlist_t *L;
+// int main() {
+// 	int i;
+// 	dlist_t *L;
 
-	L = dlist_init();
+// 	L = dlist_init();
 
-	if (!L) {
-		printf("Death\n"); 
-		return 1;
-	}
+// 	if (!L) {
+// 		printf("Death\n"); 
+// 		return 1;
+// 	}
 
-	dlist_insert(L, 10);
-	dlist_insert(L, 5);
-	dlist_insert(L, 12);
+// 	dlist_insert(L, 10);
+// 	dlist_insert(L, 5);
+// 	dlist_insert(L, 12);
 
-	dlist_print(L);
+// 	dlist_print(L);
 
-	dlist_delete(L, 5);
-	dlist_print(L);
-
-
-	dlist_destroy(L);
-}
+// 	dlist_delete(L, 5);
+// 	dlist_print(L);
 
 
-
+// 	dlist_destroy(L);
+// }

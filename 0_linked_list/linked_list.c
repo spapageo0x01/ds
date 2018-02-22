@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <assert.h>
 #include "linked_list.h"
 #include "../error/errors_sp.h"
 
@@ -260,13 +259,17 @@ int list_lookup(list_t *list, void *data, int (*isequal)(const void *, const voi
 // Time complexity: O(1)
 size_t list_length(list_t *list, int *error)
 {
-	node_t *tmp;
+	size_t *tmp;
 	*error = NO_ERROR;
 
 	if (!list) {
 		*error = ERROR_NULL;
-		return EXIT_FAILURE;
+		return 0;
 	}
 
-	return list->length;
+	pthread_mutex_lock(&list->lock);
+	tmp = list->length;
+	pthread_mutex_unlock(&list->lock);
+
+	return tmp;
 }
