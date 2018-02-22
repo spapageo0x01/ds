@@ -53,8 +53,6 @@ int list_destroy(list_t *list, int *error)
 }
 
 
-
-
 // Time complexity: O(1)
 int list_insert_head(list_t *list, void *data, int *error)
 {
