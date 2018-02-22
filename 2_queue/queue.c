@@ -3,7 +3,6 @@
 #include <assert.h>
 #include "queue.h"
 
-//TODO: peek() - gets the element at the front of the queue without removing it
 //TODO: isfull() - checks if the queue is full
 //TODO: isempty() - Checks if the queue is empty
 
@@ -24,6 +23,7 @@ queue_t * queue_init(int *error)
 		return NULL;
 	}
 
+	tmp->data = NULL;
 	tmp->next = NULL;
 	q->head = q->tail = tmp;
 
@@ -127,7 +127,6 @@ void * queue_peek(queue_t *q, int *error)
 		return NULL;
 	}
 
-
 	pthread_mutex_lock(&q->head_lock);
 	data = q->head->data;
 	pthread_mutex_unlock(&q->head_lock);
@@ -136,26 +135,3 @@ void * queue_peek(queue_t *q, int *error)
 }
 
 //--------------------------------------------------------------------------------------------------
-
-/*
-
-
-int main(void)
-{
-	int ret;
-	queue_t queue;
-	queue_init(&queue);
-	assert(queue);
-
-	queue_enqueue(&queue, 10);
-	queue_enqueue(&queue, 5);
-	queue_enqueue(&queue, 12);
-
-	queue_dequeue(&queue, &ret);
-	printf("%d\n", ret);
-	queue_dequeue(&queue, &ret);
-	printf("%d\n", ret);
-	queue_dequeue(&queue, &ret);
-	printf("%d\n", ret);
-}
-*/

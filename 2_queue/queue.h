@@ -16,15 +16,11 @@ typedef struct __queue_t {
 } queue_t;
 
 
-//TODO: peek() - gets the element at the front of the queue without removing it
 //TODO: isfull() - checks if the queue is full
 //TODO: isempty() - Checks if the queue is empty
 
 queue_t * queue_init(int *error);
 int queue_destroy(queue_t *q, int *error);
-
 int queue_enqueue(queue_t *q, void *data, int *error);
 void * queue_dequeue(queue_t *q, int *error);
-
 void * queue_peek(queue_t *q, int *error);
-

@@ -258,7 +258,7 @@ int list_lookup(list_t *list, void *data, int (*isequal)(const void *, const voi
 // Time complexity: O(1)
 size_t list_length(list_t *list, int *error)
 {
-	size_t *tmp;
+	size_t tmp;
 	*error = NO_ERROR;
 
 	if (!list) {
