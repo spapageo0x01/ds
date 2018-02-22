@@ -61,7 +61,8 @@ int queue_destroy(queue_t *q, int *error)
 }
 
 
-int queue_enqueue(queue_t *q, void *data, int *error) {
+int queue_enqueue(queue_t *q, void *data, int *error)
+{
 	node_t *new_node;
 
 	if (q == NULL) {
@@ -88,7 +89,8 @@ int queue_enqueue(queue_t *q, void *data, int *error) {
 
 
 
-void * queue_dequeue(queue_t *q, int *error) {
+void * queue_dequeue(queue_t *q, int *error)
+{
 	void *data;
 	node_t *tmp = NULL;
 	node_t *new_head = NULL;
@@ -111,6 +113,25 @@ void * queue_dequeue(queue_t *q, int *error) {
 	pthread_mutex_unlock(&q->head_lock);
 
 	free(tmp);
+	return data;
+}
+
+
+
+void * queue_peek(queue_t *q, int *error)
+{
+	void *data;
+
+	if (q == NULL) {
+		*error = ERROR_NULL;
+		return NULL;
+	}
+
+
+	pthread_mutex_lock(&q->head_lock);
+	data = q->head->data;
+	pthread_mutex_unlock(&q->head_lock);
+
 	return data;
 }
 

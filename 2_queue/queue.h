@@ -26,3 +26,5 @@ int queue_destroy(queue_t *q, int *error);
 int queue_enqueue(queue_t *q, void *data, int *error);
 void * queue_dequeue(queue_t *q, int *error);
 
+void * queue_peek(queue_t *q, int *error);
+
