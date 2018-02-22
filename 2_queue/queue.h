@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include "../error/errors_sp.h"
 
 typedef struct __node_t {
-	int 			value;
+	void *data;
 	struct __node_t	*next;
 } node_t;
 
@@ -19,9 +20,9 @@ typedef struct __queue_t {
 //TODO: isfull() - checks if the queue is full
 //TODO: isempty() - Checks if the queue is empty
 
-void queue_init(queue_t *q);
-void queue_enqueue(queue_t *q, int value);
-int queue_dequeue(queue_t *q, int *value);
+queue_t * queue_init(int *error);
+int queue_destroy(queue_t *q, int *error);
 
-//TODO: complete this!
-void queue_destroy(queue_t *q);
+int queue_enqueue(queue_t *q, void *data, int *error);
+void * queue_dequeue(queue_t *q, int *error);
+

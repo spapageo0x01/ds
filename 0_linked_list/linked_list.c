@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include "linked_list.h"
-#include "../error/errors_sp.h"
 
 
 // Time Complexity: O(1)
