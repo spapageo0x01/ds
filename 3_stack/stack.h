@@ -20,7 +20,11 @@ typedef struct stack {
 stack_t * stack_init(size_t capacity, int *error);
 int stack_destroy(stack_t *stack, int *error);
 
-
 int stack_push(stack_t* stack, void* data, int *error);
+void * stack_pop(stack_t* stack, int *error);
+void * stack_top(stack_t* stack, int *error);
+size_t stack_size(stack_t* stack, int *error);
+size_t stack_capacity(stack_t* stack, int *error);
+
 
 #endif

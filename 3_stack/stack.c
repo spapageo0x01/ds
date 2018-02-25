@@ -7,6 +7,7 @@
 static const size_t MINIMUM_CAPACITY = 10;
 
 
+// Time complexity: O(1)
 stack_t * stack_init(size_t capacity, int *error)
 {
 	stack_t *new_stack;
@@ -30,6 +31,7 @@ stack_t * stack_init(size_t capacity, int *error)
 }
 
 
+// Time complexity: O(1)
 int stack_destroy(stack_t *stack, int *error)
 {
 	*error = NO_ERROR;
@@ -50,7 +52,7 @@ int stack_destroy(stack_t *stack, int *error)
 }
 
 
-
+// Time complexity: O(1) [locks & signals?]
 int stack_push(stack_t* stack, void* data, int *error)
 {
 	*error = NO_ERROR;
@@ -76,7 +78,7 @@ int stack_push(stack_t* stack, void* data, int *error)
 }
 
 
-
+// Time complexity: O(1) [locks & signals?]
 void * stack_pop(stack_t* stack, int *error)
 {
 	void *data = NULL;
@@ -103,8 +105,8 @@ void * stack_pop(stack_t* stack, int *error)
     return data;
 }
 
-//-----
 
+// Time complexity: O(1) [locks & signals?]
 void * stack_top(stack_t* stack, int *error)
 {
     void* data;
@@ -130,6 +132,7 @@ void * stack_top(stack_t* stack, int *error)
     return data;
 }
 
+// Time complexity: O(1)
 size_t stack_size(stack_t* stack, int *error)
 {
 	size_t size;
@@ -147,6 +150,7 @@ size_t stack_size(stack_t* stack, int *error)
 	return size;
 }
 
+// Time complexity: O(1)
 size_t stack_capacity(stack_t* stack, int *error)
 {
 	*error = NO_ERROR;
