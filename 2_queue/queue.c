@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
 #include "queue.h"
 
 //TODO: isfull() - checks if the queue is full

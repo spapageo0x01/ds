@@ -1,6 +1,4 @@
-#include <stdio.h>
 #include "linked_list.h"
-
 
 // Time Complexity: O(1)
 list_t * list_init(int *error)
