@@ -9,6 +9,7 @@ typedef struct __string_t {
 	size_t length;
 } string_t;
 
+
 typedef struct __hash_t {
 	list_t lists[BUCKETS];
 } hash_t;

@@ -49,7 +49,6 @@ int main()
 	assert(test_list);
 	assert(error == NO_ERROR);
 
-
 	// 1. Single threaded tests
 	ret = list_insert_head(test_list, (void *) 5, &error);
 	assert(ret == EXIT_SUCCESS);
