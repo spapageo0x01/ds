@@ -17,7 +17,7 @@ typedef struct __hash_t {
 hash_t * hash_init(int *error);
 void hash_destroy(hash_t *hash_table, int *error);
 
-int hash_lookup(hash_t *hash_table, string_t *data, int *error);
+int hash_lookup(hash_t *hash_table, int key, int *error);
 
-int hash_insert(hash_t *hash_table, string_t *data, int *error);
-int hash_delete(hash_t *hash_table, string_t *data, int *error);
+int hash_insert(hash_t *hash_table, int key, int *error);
+int hash_delete(hash_t *hash_table, int key, int *error);

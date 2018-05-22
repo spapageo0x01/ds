@@ -268,3 +268,18 @@ size_t list_length(list_t *list, int *error)
 
 	return tmp;
 }
+
+
+void __list_print(list_t *list)
+{
+	node_t *tmp;
+	if (!list || !list->head) {
+		return;
+	}
+
+	tmp = list->head;
+	while (tmp) {
+		printf("%d-", *(int *) tmp->data);
+		tmp = tmp->next;
+	}
+}
